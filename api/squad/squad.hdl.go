@@ -177,6 +177,12 @@ func (db Database) DeleteSquad(ctx *gin.Context) {
 		return
 	}
 
+	dbSquad, err := GetSquadByID(db.DB, dbLeader.SquadID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
 	// delete squad
 	if err := DeleteSquad(db.DB, dbLeader.SquadID); err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
@@ -184,6 +190,21 @@ func (db Database) DeleteSquad(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": "Squad Deleted Successfully"})
+
+	// Delete all users
+	for _, id := range dbSquad.SquadMembers {
+
+		if id == int32(dbLeader.ID) {
+			continue
+		} else {
+			// delete user
+			if err := user.DeleteUser(db.DB, uint(id)); err != nil {
+				ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+				return
+			}
+		}
+
+	}
 }
 
 func (db Database) ImageUpload() gin.HandlerFunc {

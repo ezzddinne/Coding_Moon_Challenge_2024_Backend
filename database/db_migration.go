@@ -64,8 +64,13 @@ func _create_root_user(db *gorm.DB, enforcer *casbin.Enforcer) {
 		defaultPaymentStatus := os.Getenv("DEFAULT_PAIMENT_STATUS")
 		paymentStatus := defaultPaymentStatus == "true"
 
+		//convert the verification status to bool
+		defaultVerifStatus := os.Getenv("DEFAULT_VERIFICATION_STATUS")
+		VerifStatus := defaultVerifStatus == "true"
+
 		//create the root user
-		db_user := user.User{FirstName: os.Getenv("DEFAULT_FIRSTNAME"), LastName: os.Getenv("DEFAULT_LASTNAME"), Email: os.Getenv("DEFAULT_EMAIL"), University: os.Getenv("DEFAULT_UNIVERSITY"), Password: os.Getenv("DEFAULT_USER_PASSWORD"), Phone: os.Getenv("DEFAULT_PHONE"), Paiment_Status: paymentStatus, Role: os.Getenv("DEFAULT_ROOT")}
+		db_user := user.User{FirstName: os.Getenv("DEFAULT_FIRSTNAME"), LastName: os.Getenv("DEFAULT_LASTNAME"), Email: os.Getenv("DEFAULT_EMAIL"), University: os.Getenv("DEFAULT_UNIVERSITY"), Password: os.Getenv("DEFAULT_USER_PASSWORD"), Phone: os.Getenv("DEFAULT_PHONE"), Paiment_Status: paymentStatus, Role: os.Getenv("DEFAULT_ROOT"), IsVerified: VerifStatus}
+
 		user.HashPassword(&db_user.Password)
 
 		if err := db.Create(&db_user).Error; err != nil {

@@ -390,7 +390,7 @@ func (db Database) ForgetPassword(ctx *gin.Context) {
 
 	// Send Emails
 	emailData := EmailData{
-		URL:     "/resetpassword/" + token,
+		URL:     "https://codingmoonchallenge.com/resetpassword/" + token,
 		Subject: "Reset Your Password",
 	}
 

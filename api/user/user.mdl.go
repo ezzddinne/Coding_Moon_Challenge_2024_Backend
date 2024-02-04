@@ -52,7 +52,6 @@ type ResetTokenUser struct {
 	LeaderID   uint   `gorm:"column:user_id" json:"leader_id"`
 	Email      string `gorm:"column:email;unique" json:"email"`
 	ResetToken string `gorm:"column:token" json:"token"`
-	//ExpiresAt  time.Time `gorm:"column:expiration_time"`
 }
 
 // ResetPasswordInput struct
