@@ -49,4 +49,7 @@ func RoutesAuthJWT(router *gin.RouterGroup, db *gorm.DB, enforcer *casbin.Enforc
 	// update squad name route
 	router.PATCH("/update", middleware.Authorize("squads", "write", enforcer), baseInstance.UpdateName)
 
+	// Delete leader route
+	router.DELETE("/leader", middleware.Authorize("squads", "write", enforcer), baseInstance.DeleteLeader)
+
 }

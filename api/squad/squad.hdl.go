@@ -205,6 +205,7 @@ func (db Database) DeleteSquad(ctx *gin.Context) {
 		}
 
 	}
+
 }
 
 func (db Database) ImageUpload() gin.HandlerFunc {
@@ -497,4 +498,36 @@ func (db Database) GetSquadLogo(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"message": dbSquad.LogoURL})
+}
+
+func (db Database) DeleteLeader(ctx *gin.Context) {
+
+	// get the session values
+	session := middleware.ExtractTokenValues(ctx)
+
+	//get user
+	dbLeader, err := user.GetUserByID(db.DB, session.UserID)
+	if err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+
+	if dbLeader.SquadID != 0 {
+		
+		//Deleted successfully
+		if err := DeleteSquad(db.DB, dbLeader.SquadID); err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+			return
+		}
+	}
+	
+	//delete the leader
+	//Check
+	if err = user.DeleteUser(db.DB, dbLeader.ID); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"message": err.Error()})
+		return
+	}
+	//Deleted successfully
+	ctx.JSON(http.StatusOK, gin.H{"message": "Leader deleted successfully"})
+	
 }

@@ -16,7 +16,6 @@ type Squad struct {
 	SquadMembers pq.Int32Array  `gorm:"column:squad_members;type:integer[]" json:"squad_members"`
 	LogoURL      string         `gorm:"column:logo_url;not null" json:"logo_url"`
 	CvURLS       pq.StringArray `gorm:"column:cv_urls;type:varchar[]" json:"cv_urls"`
-
 	gorm.Model
 }
 

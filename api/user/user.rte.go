@@ -54,6 +54,8 @@ func RoutesUsersJWT(router *gin.RouterGroup, db *gorm.DB, enforcer *casbin.Enfor
 
 	// Delete user route
 	router.DELETE("/:id", middleware.Authorize("users", "write", enforcer), baseInstance.DeleteUser)
+
+
 }
 
 func RoutesUserPassword(router *gin.RouterGroup, db *gorm.DB, enforcer *casbin.Enforcer) {
